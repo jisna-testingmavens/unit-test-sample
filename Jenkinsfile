@@ -50,7 +50,6 @@ pipeline {
         }
         success {
             echo "Pipeline completed successfully!"
-            publishCoverage adapters: [coberturaAdapter('coverage.xml')]
         }
         failure {
             echo "Pipeline failed!"
