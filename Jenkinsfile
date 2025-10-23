@@ -19,6 +19,7 @@ pipeline {
                 python3 -m venv ${PYTHON_ENV}
                 ${PYTHON_ENV}/bin/pip install --upgrade pip
                 ${PYTHON_ENV}/bin/pip install fastapi uvicorn requests pytest
+                ${PYTHON_ENV}/bin/pip install httpx
                 '''
             }
         }
