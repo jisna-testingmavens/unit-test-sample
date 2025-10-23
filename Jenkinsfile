@@ -8,7 +8,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your repo
                 git branch: 'main', url: 'https://github.com/jisna-testingmavens/unit-test-sample.git'
             }
         }
@@ -18,19 +17,17 @@ pipeline {
                 echo "Creating virtual environment and installing dependencies"
                 sh '''
                 python3 -m venv ${PYTHON_ENV}
-                source ${PYTHON_ENV}/bin/activate
-                pip install --upgrade pip
-                pip install fastapi uvicorn requests pytest
+                ${PYTHON_ENV}/bin/pip install --upgrade pip
+                ${PYTHON_ENV}/bin/pip install fastapi uvicorn requests pytest
                 '''
             }
         }
 
         stage('Build') {
             steps {
-                echo "No build required for FastAPI, just check syntax"
+                echo "Checking syntax"
                 sh '''
-                source ${PYTHON_ENV}/bin/activate
-                python -m py_compile main.py
+                ${PYTHON_ENV}/bin/python -m py_compile main.py
                 '''
             }
         }
@@ -39,8 +36,7 @@ pipeline {
             steps {
                 echo "Running pytest unit tests"
                 sh '''
-                source ${PYTHON_ENV}/bin/activate
-                PYTHONPATH=. pytest -v
+                PYTHONPATH=. ${PYTHON_ENV}/bin/pytest -v
                 '''
             }
         }
