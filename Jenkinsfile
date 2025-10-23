@@ -18,7 +18,7 @@ pipeline {
                 sh '''
                 python3 -m venv ${PYTHON_ENV}
                 ${PYTHON_ENV}/bin/pip install --upgrade pip
-                ${PYTHON_ENV}/bin/pip install fastapi uvicorn requests pytest pytest-cov
+                ${PYTHON_ENV}/bin/pip install fastapi uvicorn requests pytest httpx pytest-cov
                 '''
             }
         }
