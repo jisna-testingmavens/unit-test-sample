@@ -14,12 +14,11 @@ pipeline {
 
         stage('Setup Python') {
             steps {
-                echo "Creating virtual environment and installing dependencies"
+                echo "Setting up environment"
                 sh '''
                 python3 -m venv ${PYTHON_ENV}
                 ${PYTHON_ENV}/bin/pip install --upgrade pip
-                ${PYTHON_ENV}/bin/pip install fastapi uvicorn requests pytest
-                ${PYTHON_ENV}/bin/pip install httpx
+                ${PYTHON_ENV}/bin/pip install fastapi uvicorn requests pytest pytest-cov
                 '''
             }
         }
@@ -35,13 +34,14 @@ pipeline {
 
         stage('Unit Test') {
             steps {
-                echo "Running pytest unit tests"
+                echo "Running pytest with coverage"
                 sh '''
-                PYTHONPATH=. ${PYTHON_ENV}/bin/pytest -v
+                PYTHONPATH=. ${PYTHON_ENV}/bin/pytest --cov=. --cov-report=xml --cov-report=term -v
                 '''
             }
         }
-    }
+
+
 
     post {
         always {
@@ -50,6 +50,7 @@ pipeline {
         }
         success {
             echo "Pipeline completed successfully!"
+            publishCoverage adapters: [coberturaAdapter('coverage.xml')]
         }
         failure {
             echo "Pipeline failed!"
